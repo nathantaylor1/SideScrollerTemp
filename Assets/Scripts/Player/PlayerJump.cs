@@ -15,22 +15,16 @@ public class PlayerJump : MonoBehaviour
     private bool _canCheck = true;
     private Collider2D _collider2D;
     private Rigidbody2D _rigidbody2D;
-    private PlayerAnimationController _playerAnimController;
     private float timeSinceJumpPress, timeSinceGrounded;
-    
+
     private void Awake()
     {
         _collider2D = GetComponent<Collider2D>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _playerAnimController = GetComponent<PlayerAnimationController>();
     }
 
     private void Update()
     {
-        float yVel = _rigidbody2D.velocity.y;
-        if (yVel < 0)
-            _playerAnimController.SetFalling(true);
-
         UpdateJumpButton();
         UpdateGrounded();
         UpdateVerticalVelocity();
@@ -56,8 +50,6 @@ public class PlayerJump : MonoBehaviour
         if (_canCheck && grounded)
         {
             timeSinceGrounded = groundedRememberTime;
-            _playerAnimController.SetJumping(false);
-            _playerAnimController.SetFalling(false);
         }
     }
 
@@ -80,9 +72,6 @@ public class PlayerJump : MonoBehaviour
         Vector2 velocityUpdate = _rigidbody2D.velocity;
         velocityUpdate.y = jumpSpeed;
         _rigidbody2D.velocity = velocityUpdate;
-
-        _playerAnimController.SetFalling(false);
-        _playerAnimController.SetJumping(true);
         _canCheck = false;
         StartCoroutine(CO_WaitToCheck());
     }
